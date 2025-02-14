@@ -1,0 +1,16 @@
+# Ignore R environment files
+.Rhistory
+.Rproj.user/
+.RData
+.Ruserdata
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore data files
+data/raw_data/
+data/processed_data/
+
+# Ignore R package dependencies (use `renv.lock` instead)
+renv/

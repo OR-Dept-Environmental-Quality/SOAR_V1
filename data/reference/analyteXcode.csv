@@ -1,0 +1,33 @@
+name,EnvistaName,Alias,AqsName,method_code_filter
+Ambient Temperature,Ambient Temperature,none,68105,-9999
+Black Carbon,Black Carbon,none,84313,-9999
+Carbon Monoxide,Carbon Monoxide,none,42101,-9999
+datetime,datetime,none,-9999,-9999
+Nitric Oxide,Nitric Oxide,none,42601,-9999
+Nitrogen Dioxide,Nitrogen Dioxide,none,42602,-9999
+Oxides of Nitrogen,Oxides of Nitrogen,none,42603,-9999
+Ozone,Ozone,none,44201,-9999
+PM2.5 Estimate,pm2.5 estimate,none,88502,-9999
+Relative Humidity,Relative Humidity,none,62201,-9999
+sigma_theta,sigma_theta,none,-9999,-9999
+Wind Direction,Wind Direction,none,61104,-9999
+Wind Speed,Wind Speed,none,61101,-9999
+frm25,none,none,88101,-9999
+pm2.5l_bam1020,pm2.5l_bam1020,none,88101,170
+pm2.5l_bam1022,pm2.5l_bam1022,none,88101,209
+Solar Radiation,Solar Radiation,none,63301,-9999
+Sensor A Pm2.5est,Sensor A Pm2.5est,none,-9999,-9999
+Sensor B Pm2.5est,Sensor B Pm2.5est,none,-9999,-9999
+Pm2.5_5003 sensor A,Pm2.5_5003 sensor A,none,-9999,-9999
+Pm2.5_5003 sensor B,Pm2.5_5003 sensor B,none,-9999,-9999
+pm2.5 est sensor,pm2.5 est sensor,none,-9999,-9999
+Neph,Neph,none,11203,-9999
+neph flow,neph flow,neph flow calc,-9999,-9999
+UVC BC1 370 nm,UVC BC1 370 nm,none,-9999,-9999
+BC1 370 nm,BC1 370 nm,none,-9999,-9999
+BC2 470 nm,BC2 470 nm,none,-9999,-9999
+BC3 520 nm,BC3 520 nm,none,-9999,-9999
+BC4 590 nm,BC4 590 nm,none,-9999,-9999
+BC5 660 nm,BC5 660 nm,none,-9999,-9999
+BC6 950 nm,BC6 950 nm,none,-9999,-9999
+black carbon bc6 880 nm,black carbon bc6 880 nm,none,84313,-9999

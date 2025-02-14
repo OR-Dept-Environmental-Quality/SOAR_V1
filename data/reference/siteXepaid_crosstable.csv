@@ -1,0 +1,81 @@
+shortName,stationsTag,monitor_type,longName,StreetAddress,City,County,location.latitude,location.longitude,latitude,longitude,Elevation,airshed,StartDate,StopDate,seasonal,PM25FRM,PM25all,Speciation,Ozone,AirToxics,PM10,NO2,CO,SO2,rh,WS,WD,TEMP,SOLAR,Sensor,Met,Comments
+ACS,410430009,,Calapooia Middle School,830 SE 24th,Albany,Linn,44.6156,-123.0916,44.6156,-123.0916,72.12,ACS,10/27/1999,present,,,x,,,,,,,,,,,,,,,PM2.5 Network
+AFD,410290203,,Ashland Fire Department (AFD) ,"455 Siskiyou Blvd, Ashland, OR 97520",Ashland,Jackson,42.1941,-122.7086,42.1941,-122.7086,596,AFD,7/12/2016,present,,,x,,,,,,,,,,,,,,,PM2.5 Network
+BDF,-9999,,Coos Forest Protective Assn. ,"415 Redwood Street Brookings, Oregon� 97415",Brookings,Curry,42.0547,-124.2769,42.0547,-124.2769,49,BDF,7/29/2020,present,,,x,,,,,,,,,,,,,x,,SensOR
+BEE,-9999,,Bend High School,Bend NE 8th and Emerson,Bend,Deschutes,44.05194,-121.2942,44.05194,-121.2942,1114,Bend,6/26/2020,present,,,x,,,x,,,,,,,,,,x,,SensOR
+BFS,410010004,,Baker City Forest Service,3285 11th St.,Baker City,Baker,44.7882,-117.8446,44.7882,-117.8446,1047,BFS,11/3/2005,present,,,x,,,,,,,,,,,,,,,Forest Health Network. In a partnership with the US Forest Service
+BHP,410670111,,Beaverton Highland Park School,7000 SW Wilson St,Beaverton,Washington,45.4702,-122.8162,45.4702,-122.8162,58,BHP,8/28/1999,present,,,x,,,,,,,,,,,,,,,PM2.5 Network
+BMV,-9999,,Mt. View HS,na,Bend,Deschutes,44.07778,-121.26556,44.07778,-121.26556,1072,Bend,9/9/9999,future,,,x,,,,,,,,,,,,,x,,SensOR
+BPR,-9999,,Pine Ridge Elementary,na,Bend,Deschutes,44.02333,-121.33139,44.02333,-121.33139,1171,Bend,9/9/9999,future,,,x,,,,,,,,,,,,,x,,SensOR
+BPS,410170120,,Bend Pump Station,35 NW Portland St,Bend,Deschutes,44.0633,-121.3127,44.0633,-121.3127,1105.3,Bend,8/16/2000,present,,,x,,,,,,,,,,,,,,,PM2.5 Network
+BRH,-9999,,Raleigh Hills K-8,na,SW Portland,Multnomah,45.48306,-122.75833,45.48306,-122.75833,87,BRH,9/9/9999,future,,,x,,,,,,,,,,,,,x,,SensOR
+BWS,410250003,frm25,Burns Washington St.,458 E Washington St.,Burns,Harney,43.5894,-119.0481,43.5894,-119.0481,1268,BWS,9/16/2009,present,,x,x,,,,,,,,,,,,,,,PM2.5 Network and Forest Health Network in partnership with the BLM
+CBM,-9999,,Marshfield HS,"�972 Ingersoll Ave, Coos Bay, OR 97420 (7th & Golden)",Coos Bay,Coos,43.3626,-124.2188,43.3626,-124.2188,7,CBM,11/7/2019,present,,,x,,,,,,,,,,,,,x,,SensOR
+CCB,410030013,,Corvallis Circle Boulevard,1310 NW Circle Blvd,Corvallis,Benton,44.5884,-123.2673,44.5884,-123.2673,72.3,CCB,11/19/1998,present,,,x,,,,,,,,,,,,,,,PM2.5 Network
+CCH,410610120,,Cove City Hall,504 Alder St,Cove,Union,45.3008,-117.8128,45.3008,-117.8128,881.79,CCH,7/14/2007,present,x,,x,,,,,,,,,,,,,x,,"Union Co. Field Burning,  July through September"
+CDD,-9999,,Duke Drive,Margi Way and Duke Dr.  34941 Duke Dr.,Chiloquin,Klamath,42.5411,-121.9216,42.5411,-121.9216,1308,CDD,7/30/2019,present,,,x,,,,,,,,,,,,,x,,SensOR
+CJFS,410330036,,Cave Junction Forest Service,26568 Redwood Hwy,Cave Junction,Josephine,42.1617,-123.64835,42.1617,-123.64835,676,CJFS,5/25/2011,present,,,x,,,,,,,,,,,,,,,Forest Health Network. In a partnership with the US Forest Service
+CLR,410351002,,Crater Lake Maintenance Center,751 Crater Lake Hwy,Unincorporated,Klamath,42.8956,-122.1363,42.8956,-122.1363,1965,CLR,6/6/2001,present,x,,x,,,,,,,,,,,,,,,"Visibility Monitoring Network. Operates seasonally, June through September"
+COR,-9999,,na,na,Corvallis,Benton,44.5352,-123.2528,44.5352,-123.2528,73,COR,9/9/9999,planned,,,,,,x,,,,,,,,,,,,na
+CPFD,-9999,,Jackson Co. FD 3,na,Central Point,Jackson,42.36889,-122.91278,42.36889,-122.91278,395,CPFD,9/9/9999,future,,,x,,,,,,,,,,,,,x,,SensOR
+DFS,410470123,,Detroit Lake Forest Service ,Forest Service Ranger Station,Detroit Lake,Linn,44.72831,-122.18276,44.72831,-122.18276,501,DFS,6/15/2015,present,x,,x,,,,,,,,,,,,,x,,"Field Burning Monitoring Network. In a partnership with the Oregon Dept. of Ag. Operates sonally, July through September"
+DLM,-9999,,LeCreole Middle School,na,Dallas,Polk,44.9239,-123.3019,44.9239,-123.3019,98,DLM,9/9/9999,planned,,,x,,,,,,,,,,,,,x,,SensOR
+E99,410390059,,Eugene Hwy 99,530 Hwy 99 North,Eugene,Lane,44.06722,-123.14135,44.06722,-123.14135,123,Eugene,7/1/2011,present,,x,x,,,x,x,,,,,,,,,,,na
+CGC,410399004,,Cottage Grove City Shops ,425 N 14th ,Cottage Grove,Lane,43.7995,-123.05349,43.7995,-123.05349,196,ECG,1/1/2008,present,,x,x,,,,,,,,,,,,,,,na
+SCH,410391009,,Springfield City Hall ,225 N 5TH,Springfield,Lane,44.0467,-123.0177,44.0467,-123.0177,140,Eugene,10/18/1970,present,,x,x,,,,,,,,,,,,,,,na
+EFS,410630001,,Enterprise Forest Service,88401 Hwy 82,Enterprise,Wallowa,45.4263,-117.2967,45.4263,-117.2967,1163,EFS,7/1/1994,present,,,x,,,,,,,,,,,,,,,Forest Health Network. In a partnership with the US Forest Service
+EHS,-9999,,Estacada HS,na,Estacada,Clackamas,45.29556,-122.33111,45.29556,-122.33111,159,EHS,9/9/9999,future,,,x,,,,,,,,,,,,,x,,SensOR
+FGC,-9999,,Pacific University,"Cedar St and 23rd Place, Forest Grove (FGC)",Forest Grove,Washington,45.5248,-123.1055,45.5248,-123.1055,80,FGC,6/21/2019,present,,,x,,,,,,,,,,,,,x,,SensOR
+FDF,410390100,,Florence Forestry ,2660 Kingwood St,Florence,Lane,43.9896,-124.1092,43.9896,-124.1092,18,FODF,4/18/2008,present,,,x,,,,,,,,,,,,,,,na
+GCH,-9999,,Centenial High School,na,Gresham,Multnomah,45.496111,-122.4831,45.496111,-122.4831,80,GCH,7/1/2020,present,,,x,,,,,,,,,,,,,x,,SensOR
+GHS,-9999,,Gladstone High School,na,Gladstone,Clackamas,45.3846,-122.5971,45.3846,-122.5971,23,GHS,9/9/9999,planned,,,x,,,,,,,,,,,,,x,,SensOR
+GLC,410512008,pm2.5 est,Gresham Learning Centennial ,,Gresham,Multnomah,45.51198,-122.48203,45.51198,-122.48203,77,,12/1/2016,past,,,x,,,,,,,,,,,,,,,
+GPP,410330114,,Grants Pass Parkside School,735 SW Wagner M St.,Grants Pass,Josephine,42.4341,-123.3489,42.4341,-123.3489,277,GPP,7/19/2002,present,,x,x,,,,,,,,,x,x,x,,,"WS/WD, Temp",PM2.5 Network and Forest Health Network in Parntership with the BLM
+HHF,410670004,,Hillsboro Hare Field,1149 NE Grant St.,Hillsboro,Washington,45.5285,-122.9724,45.5285,-122.9724,26.8,HHF,1/1/2005,present,,x,x,,,x,,,,,,,,,,,,PM2.5 Network
+HPS,410591002,,Hermiston Pump Station,Newport Ave & SE 5th St,Hermiston,Umatilla,45.83911,-119.283,45.83911,-119.283,138,HPS,9/9/9999,future,,,x,,,,,,,,,,,,,x,,SensOR
+HRFD,-9999,,WS RFPD 2,na,Hood River,Hood River,45.685,-121.52722,45.685,-121.52722,171,HRFD,9/9/9999,future,,,x,,,,,,,,,,,,,x,,SensOR
+JDD,410230002,,John Day  ,230 NE Dayton St,John Day,Grant,44.418,-118.9513,44.418,-118.9513,939,JDD,2/14/2011,present,,,x,,,,,,,,,,,,,,,Forest Health Network. In a partnership with the US Forest Service
+PJH,410511191,,Jefferson HS,"5210 N Kerby Ave, Portland",Portland,Multnomah,45.5609,-122.67152,45.5609,-122.67152,,Portland,9/9/9999,present,,,,,,,,,,,,,,,,,,na
+KCE,-9999,,Cummings Elementary,na,Keizer,Marion,44.99028,-123.03444,44.99028,-123.03444,40,KCE,9/9/9999,future,,,x,,,,,,,,,,,,,x,,SensOR
+KFP,410350004,,Klamath Falls Peterson School,4856 Clinton St,Klamath Falls,Klamath,42.1904,-121.7313,42.1904,-121.7313,1244,KFP,1/20/1985,present,,x,x,,,,x,,,,,x,x,x,,,"WS/WD, Temp",PM2.5 Network and Forest Health Network in Parntership with the USFS
+LCM,410370001,,Lakeview Center & M St,Center & M St,Lakeview,Lake,42.1892,-120.354,42.1892,-120.354,1445,LCM,10/1/1991,present,,x,x,,,,x,,,,,x,x,x,,,"WS/WD, Temp",PM2.5 Network
+LHN,410610123,,La Grande Hall & North ,"1305 N Willow Street, La Grande",La Grande,Union,45.3236,-118.0781,45.3236,-118.0781,844,LHN,12/10/2003,present,,,x,,,x,x,,,,,x,x,x,,,"WS/WD, Temp",PM2.5 Network and NATTS
+LML,410432003,,Lyons Marilynn School (LMS),741 5th St,Lyons,Marion,44.7788,-122.6169,44.7788,-122.6169,200,LML,7/8/1993,present,x,,x,,,,,,,,,,,,,,,"Field Burning Monitoring Network. In a partnership with the Oregon Dept. of Ag. Operates sonally, July through September"
+LPFD,-9999,,La Pine FD,"15990 Burgess Rd, La Pine, OR 97739",La Pine,Deschutes,43.7038,-121.527,43.7038,-121.527,1295,LPFD,9/9/9999,present,,,x,,,,,,,,,,,,,x,,SensOR
+MCS,410430104,,Mill City Santiam High School,Forest Service Ranger Station,Mill City,Linn,44.75209,-122.47967,44.75209,-122.47967,253,MCS,6/15/2015,present,x,,x,,,,,,,,,,,,,x,,"Field Burning Monitoring Network. In a partnership with the Oregon Dept. of Ag. Operates sonally, July through September"
+MGB,410290133,,Medford Grant & Belmont,902�GRANT�AVENUE,Medford,Jackson,42.31411,-122.8792,42.31411,-122.8792,405,MGB,1/2/2002,closed,,x,,,,,,,,,,,,,,,,
+MTV,410291002,,Medford KTVL 10,1440 Rossanly Dr,Medford,Jackson,42.342,-122.9098,42.342,-122.9098,181.6,MTV,7/17/1996,present,,,,,,,,,,,x,x,x,x,x,,"Temp, WS/WD, Solar Radiation",Met site in support of PM2.5 and ozone network
+MUL,410050102,,Multorpor Ski Bowl,Chair lift Box 87,Government Camp,Clackamas,45.28856,-121.7827,45.28856,-121.7827,1547,MUL,8/1/1982,present,x,,x,,,,,,,,,,,,,,,"Visibility Monitoring Network. Operates seasonally, June through September"
+MWJ,410292129,,Medford Welch & Jackson,711 Welch St,Medford,Jackson,42.3315,-122.8803,42.3315,-122.8803,418.5,MWJ,7/20/1989,present,,x,x,,,x,x,,,,,,,,,,,PM10 Network
+MWS,410310007,,Madras Westside School,410 SW 4th St.,Madras,Jefferson,44.6306,-121.1316,44.6306,-121.1316,688,MWS,10/27/2008,present,,,x,,,,,,,,,,,,,,,Field Burning - Jefferson Co.
+NHS,-9999,,Newport HS,na,Newport,Lincoln,44.63889,-124.04528,44.63889,-124.04528,54,NHS,9/9/9999,future,,,x,,,,,,,,,,,,,x,,SensOR
+OMR,-9999,,May Roberts School,"NW 6th Ave, Ontario, OR 97914",Ontario,Malheur,44.03337,-116.969,44.03337,-116.969,655,OMR,8/1/2020,present,,,x,,,,,,,,,,,, ,x,,na
+PBH,-9999,,Benson HS,na,Portland,Multnomah,45.52722,-122.65111,45.52722,-122.65111,46,Portland,9/9/9999,planned,,,x,,,,,,,,,,,,,x,,SensOR
+PCH,410512011,,Portland Cully Helensview School (PCH), 8678 NE Sumner St. ,Portland,Multnomah,45.5625,-122.5753,45.5625,-122.5753,23,Portland,2/1/2018,present,,,x,,,x,,,,,,,,,,,,na
+PDP,410130100,,Prineville Davis Park,251 SE Court St.,Prineville,Crook,44.3007,-120.8437,44.3007,-120.8437,873,PDP,11/1/2008,present,,x,x,,,,,,,,,,,,,,,PM2.5 Network
+PHS,410512010,,Portland Humboldt School,4915 N Gantenbein Ave,Portland,Multnomah,45.5581,-122.671,45.5581,-122.671,64,Portland,9/9/9999,present,,,x,,,x,x,,,,,,,,,x,,NATTS site
+PLH,-9999,,Lincoln HS,na,Portland,Multnomah,45.51861,-122.68778,45.51861,-122.68778,37,Portland,9/9/9999,planned,,,x,,,,,,,,,,,,,x,,SensOR
+PLM,-9999,,Lane Middle School,na,Portland,Multnomah,45.47139,-122.6014,45.47139,-122.6014,83,Portland,9/9/9999,planned,,,x,,,,,,,,,,,,,x,,SensOR
+PMC,410590121,,Pendleton McKay Creek,3745 SW Marshall Place,Pendleton,Umatilla,45.6519,-118.8232,45.6519,-118.8232,318.8,PMC,10/1/1991,present,,,x,,,,,,,,,x,x,x,,,"WS/WD, Temp",PM2.5 Network
+PMH,-9999,,Madison HS,na,Portland,Multnomah,45.53972,-122.58083,45.53972,-122.58083,58,Portland,9/9/9999,planned,,,x,,,,,,,,,,,,,x,,SensOR
+PRH,-9999,,Roosevelt HS,na,Portland,Multnomah,45.59,-122.7375,45.59,-122.7375,45,Portland,9/9/9999,planned,,,x,,,,,,,,,,,,,x,,SensOR
+PSO,410330011,,Applegate Valley,14171 Williams,Provolt,Josephine,42.2897,-123.2325,42.2897,-123.2325,359,PSO,3/31/1998,present,,,x,,,,,,,,,,,,,,,Forest Health Network. In a partnership with the BLM 
+RFD,-9999,,Douglas Co FD #2 - Station #2,"4200 Carnes Rd, Roseburg, OR 97471",Roseburg,Douglas,43.15278,-123.3825,43.15278,-123.3825,324,RFD,2/26/2020,present,,,x,,,,,,,,,,,,,x,,SensOR
+RGV,410190002,,Roseburg Garden Valley,777 NW Garden,Roseburg,Douglas,43.2266,-123.3647,43.2266,-123.3647,136.2,RGV,8/23/2005,present,,,x,,,,,,,,,,,,,,,Forest Health Network. In a partnership with the BLM 
+RHS,-9999,,Redmond High School,"675 SW Rimrock Way, Redmond, OR 97756 (Rimrock & Antler)",Redmond,Deschutes,44.275,-121.1905,44.275,-121.1905,913,RHS,10/8/2019,present,,,x,,,,,,,,,,,,,x,,SensOR
+SCS,410290019,,"Shady Cove School, 37 SCHOOLHOUSE LANE",37 Schoolhouse Lane,Shady Cove,Jackson,42.6232,-122.8102,42.6232,-122.8102,438,SCS,3/19/2001,present,,,x,,,,,,,,,,,,,,,Forest Health Network. In a partnership with the BLM 
+SFD,410432002,,Sweet Home Fire Department,1099 Long St,Sweet Home,Linn,44.3958,-122.7299,44.3958,-122.7299,164,SFD,4/3/2007,present,,,x,,,,,,,,,,,,,,,PM2.5 Network
+SFS,410170004,,Sisters Forest Service,Cascade Hwy 20,Sisters,Deschutes,44.2921,-121.5555,44.2921,-121.5555,975,SFS,5/17/2011,present,,,x,,,,,,,,,,,,,,,Forest Health Network. In a partnership with the US Forest Service
+SJM,-9999,,Judson Middle School,na,Salem,Marion,44.88917,-123.045,44.88917,-123.045,126,SJM,9/9/9999,future,,,x,,,,,,,,,,,,,x,,SensOR
+SJW,410470007,,Silverton ,James & Western,Silverton,Marion,45.015,-122.7904,45.015,-122.7904,68,SJW,9/9/9999,present,x,,x,,,,,,,,,,,,,,,"Field Burning Monitoring Network. In a partnership with the Oregon Dept. of Ag. Operates sonally, July through September"
+EWD,410390101,,Eugene Wilkes Drive (EWD),"898 Wilkes Drive, Eugene, OR",Eugene,Lane,44.1158,-123.1211,44.1158,-123.1211,114,Eugene,1/1/2009,present,,,x,,,,,,,,,x,x,,,,ws/wd,na
+TDC,410650007,pm2.5 est,The Dalles Cherry Heights,1112 Cherry Heights,The Dalles,Wasco,45.6024,-121.2034,45.6024,-121.2034,86.26,TDC,8/6/1999,present,,,x,,x,,,,,,,,,,,,,"PM2.5 Network, Ozone is monitored seasonally, May through September"
+TFD,-9999,,Tillamook ODF office,na,Tillamook,Tillamook,45.45722,-123.80278,45.45722,-123.80278,19,TFD,9/9/9999,present,,,x,,,,,,,,,,,,,x,,SensOR
+TFM,-9999,,Fowler Middle School,na,Tigard,WA,45.43167,-122.78917,45.43167,-122.78917,55,TFM,9/9/9999,future,,,x,,,,,,,,,,,,,x,,SensOR
+WAC,410392013,,Oakridge (OAK),47674 SCHOOL ST,Oakridge,Lane,43.74435,-122.48049,43.74435,-122.48049,344,WAC,1/1/1989,present,,x,x,,,,x,,,,,x,x,x,,,"WS/WD, Temp",
+WFP,-9999,,French Prarie MS,na,Woodburn ,Marion,45.15056,-122.86139,45.15056,-122.86139,56,WFP,9/9/9999,future,,,x,,,,,,,,,,,,,x,,SensOR
+WHS,-9999,,Willsonville HS,na,Wilsonville,Clackamas,45.30694,-122.74722,45.30694,-122.74722,59,WHS,9/9/9999,future,,,x,,,,,,,,,,,,,x,,SensOR
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,, ,,,,,,,,,,,,,,,,,,,,,,,,,,,

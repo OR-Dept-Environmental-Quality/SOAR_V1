@@ -13,7 +13,11 @@ It collects data for specific parameters listed in:
 
 
 please see the miro board using the following link:
-
 https://miro.com/app/board/uXjVPL4Eie8=/
 
 if you don't have access, let me know (Neda)
+
+
+There are a few lines in this directory that allow users to request queries for both hourly and daily data from
+the AQS and Envista APIs (endpoints), giving users more control over decision-making.
+Path: src/r/utils/Forvalidation_AQS_Envista_API.R

@@ -4,21 +4,21 @@ library(openxlsx)
 library(zoo)
 library(purrr)
 
-source('./pass/pass.R') 
+#ask user to define the "root_path" on the local system
+#root_path <- ??
+
+source('./pass/pass.R') # needs Aida attention & comments ????????
 
 # supporting tools
-file.sources = list.files('./tools_functions/', pattern="*.R")
-sapply(paste0('./tools_functions/',file.sources),source)
+file.sources = list.files('./src/r/data_processing/', pattern="*.R")
+sapply(paste0(file.sources),source)
 
 # needs edits after reorganizing folders/structure
-source('./getdat_func/get_envista_data.R') # get envista data
-source('./getdat_func/get_aqs_data.R') # get envista data
-source('./siteXcode/load_links.R')
-source('./figures_tools.R') # get envista data
-source('./DATA_ACCESS_envista.R') # get envista metadata
+source('./src/r/data_ingestions/get_envista_data.R') # get envista data
+source('./src/r/data_ingestions/get_aqs_data.R')     # get aqs data
+source('./src/r/data_ingestions/load_links.R')       # create cross tables
+source('./src/r/utils/support_func.R')       # create cross tables
 
-# my path to read PM2.5 DB from DataRepo located on Air Data Team sharepoint 
-root_path <- "C:/Users/nkhosra/Oregon/DEQ - Air Data Team - OzoneDB/test_DB_PM2.5_summer_2024/"
 
 
 #make a table of Envista meta data
@@ -60,8 +60,8 @@ remove(list)
 
 
 # get information like address for sites using an excel sheet maintains updated manually in the local system
-#this step might need maintanace if any changes happen in AQM
-cross_tables <- loadXlink('./')
+#this step might need maintenance if any changes happen in AQM
+cross_tables <- loadXlink('./data/reference/')
 
 # I edited the excel sheet Anthony mainatined to be able to merge this meta data with RAW measurements correctly
 aqm_monitors_localsys <- cross_tables$aqm_sites # this is siteXepaid_crosstable.csv
@@ -89,7 +89,7 @@ aqm_monitors_localsys <- cross_tables$aqm_sites # this is siteXepaid_crosstable.
 #OR
 
 # Define the date range variables 
-from_date <- '2024/06/01'
+from_date <- '2021/01/01'
 to_date   <- '2024/10/31'
 
 # Inform the user about the current date range
@@ -197,13 +197,13 @@ hourly_pm25 <- hourly_pm25 %>%
 
 # Save the raw database as-is, without metadata expansion
 # export both as csv and xlsx to not missing 00:00 in csv. 
-write.csv (hourly_pm25, file = paste0(root_path,"DB/hourly_DB/first_DB_PM2.5_hourlyRAW.csv"), row.names = FALSE)
-write.xlsx(hourly_pm25, file = paste0(root_path,"DB/hourly_DB/first_DB_PM2.5_hourlyRAW.xlsx"), rowNames = FALSE)
+write.csv (hourly_pm25, file = paste0(root_path,"first_DB_PM2.5_hourlyRAW.csv"), row.names = FALSE)
+write.xlsx(hourly_pm25, file = paste0(root_path,"first_DB_PM2.5_hourlyRAW.xlsx"), rowNames = FALSE)
 
 
 #***********************************************************************************************************************
 # Step 1: Read the CSV file of raw hourly pm2.5 
-hourly_pm25 <- read.csv(file = paste0(root_path, "DB/hourly_DB/first_DB_PM2.5_hourlyRAW.csv"))
+hourly_pm25 <- read.csv(file = paste0(root_path, "first_DB_PM2.5_hourlyRAW.csv"))
 
 # Step 2: Convert the 'datetime' column to POSIXct
 hourly_pm25$datetime <- as.POSIXct(hourly_pm25$datetime, format = "%Y-%m-%d %H:%M:%S")
@@ -248,8 +248,8 @@ hourly_pm25 <- hourly_pm25 %>%
   mutate(datetime = format(datetime, "%Y-%m-%d %H:%M:%S"))
 
 
-write.csv(hourly_pm25, file = paste0(root_path, "DB/hourly_DB/first_DB_PM2.5_hourly.csv"), row.names = FALSE)
-write.xlsx(hourly_pm25,paste0(root_path, "DB/hourly_DB/first_DB_PM2.5_hourly.xlsx"), rownames=FALSE)
+write.csv(hourly_pm25, file = paste0(root_path, "first_DB_PM2.5_hourly.csv"), row.names = FALSE)
+write.xlsx(hourly_pm25,paste0(root_path, "first_DB_PM2.5_hourly.xlsx"), rownames=FALSE)
 
 #************************************************************************************************************************
 #end of generating hourly DB for PM2.5
@@ -258,7 +258,7 @@ write.xlsx(hourly_pm25,paste0(root_path, "DB/hourly_DB/first_DB_PM2.5_hourly.xls
 # The user can create the hourly database by following the steps above or import an existing one.
 
 # Step 1: Read the CSV file of raw hourly pm2.5 
-hourly_pm25 <- read.csv(file = paste0(root_path, "DB/hourly_DB/first_DB_PM2.5_hourlyRAW.csv"))
+hourly_pm25 <- read.csv(file = paste0(root_path, "first_DB_PM2.5_hourlyRAW.csv"))
 hourly_pm25$datetime <- as.POSIXct(hourly_pm25$datetime, format = "%Y-%m-%d %H:%M:%S")
 
 #start expand DB to include more metadata
@@ -270,7 +270,7 @@ hourly_pm25 <- add_time_intervals (hourly_pm25)
 #read raw data
 # Step 1: Read the CSV file of raw daily pm2.5 
 # daily_pm25 <- read.csv(paste0(root_path, "DB/daily_DB/first_DB_PM2.5_dailyRAW.csv"))
-daily_pm25 <- read.csv(paste0(root_path, "DB/daily_DB/first_DB_PM2.5_dailyRAW.csv"))
+daily_pm25 <- read.csv(paste0(root_path, "first_DB_PM2.5_dailyRAW.csv"))
 
 
 # Step 2: Convert the 'datetime' column to POSIXct
@@ -285,15 +285,15 @@ daily_pm25 <- calc_aqi (daily_pm25)
 
 daily_pm25$poc_best <- as.numeric(daily_pm25$poc_best)
 
-
 # Remove time zone offset (-08) and convert to Date
 str(daily_pm25$date)
 daily_pm25 <- daily_pm25 %>%
   mutate(date = as.Date(str_remove(date, " -08"), format = "%Y-%m-%d"))
 
 
-
-HMS_list <- read.xlsx(paste0(root_path, "supplemental_data/HMS_daily.xlsx"),
+#the user can read HMS data for the wf season 2024 from the DataRepo located on the Air Data Team sharepoint
+# https://stateoforegon.sharepoint.com/sites/DEQ-AirDataTeam/DataRepo/Forms/AllItems.aspx?newTargetListUrl=https%3A%2F%2Fstateoforegon%2Esharepoint%2Ecom%2Fsites%2FDEQ%2DAirDataTeam%2FDataRepo&OR=Teams%2DHL&CT=1730831982828&id=%2Fsites%2FDEQ%2DAirDataTeam%2FDataRepo%2FArchived%5Ftemporaryfolder%2FOzoneDB%2Ftest%5FDB%5FPM2%2E5%5Fsummer%5F2024&viewid=74547bdb%2Dec66%2D46f2%2D9101%2D919c7bb00da9
+HMS_list <- read.xlsx("supplemental_data/HMS_daily.xlsx",
                       colNames = TRUE,
                       detectDates = TRUE)
 
@@ -323,8 +323,8 @@ hourly_pm25 <- hourly_pm25 %>%
 View(daily_pm25)
 
 # Save the raw database as-is, without metadata expansion
-write.csv(daily_pm25, file = paste0(root_path, "DB/daily_DB/first_DB_PM2.5_dailyRAW.csv"), row.names = FALSE)
-write.xlsx(daily_pm25, paste0(root_path, "DB/daily_DB/first_DB_PM2.5_dailyRAW.xlsx"), rowNames = FALSE)
+write.csv(daily_pm25, file = paste0(root_path, "first_DB_PM2.5_dailyRAW.csv"), row.names = FALSE)
+write.xlsx(daily_pm25, paste0(root_path, "first_DB_PM2.5_dailyRAW.xlsx"), rowNames = FALSE)
 
 
 
@@ -352,5 +352,5 @@ colnames(daily_pm25) <- tolower(colnames(daily_pm25))
 
 View(daily_pm25)
 
-write.csv(daily_pm25, file = paste0(root_path, "DB/daily_DB/first_DB_PM2.5_daily.csv"), row.names = FALSE)
-write.xlsx(daily_pm25, file = paste0(root_path, "DB/daily_DB/first_DB_PM2.5_daily.xlsx"), rowNames = FALSE)
+write.csv(daily_pm25, file = paste0(root_path, "first_DB_PM2.5_daily.csv"), row.names = FALSE)
+write.xlsx(daily_pm25, file = paste0(root_path, "first_DB_PM2.5_daily.xlsx"), rowNames = FALSE)

@@ -3,7 +3,7 @@
 library(httr)
 library(jsonlite)
 
-# basic api tools 
+# basic api tools#get API endpoints for hourly data and read the json file as a dataframe 
 DoRequest <- function(http2get){
   resp <- GET(http2get) #get data
   jsonRespParsed <- content(resp,as="text") #parse data
@@ -11,6 +11,7 @@ DoRequest <- function(http2get){
   return(D2OUT)}
 
 # query for monitors in Oregon
+#ask to gather credentials,state code, parameter code, time period
 get_aqs_monitors <- function(state2get, params2get, StDate, EdDate, SIGNIN){
   paste0("https://aqs.epa.gov/data/api/",
          "monitors/byState?",
@@ -23,6 +24,7 @@ get_aqs_monitors <- function(state2get, params2get, StDate, EdDate, SIGNIN){
 
 
 # does the aqs data call, and light api formatting for use 
+# Check the Miro board. 'siteXpoll' is a metadata table created for the special quer by the user
 get_aqs_dat <- function(siteXpoll, i_site){
   
   if(exists('d_aqs')){rm(d_aqs)}

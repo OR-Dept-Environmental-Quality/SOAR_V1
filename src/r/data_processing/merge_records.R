@@ -1,84 +1,4 @@
 
-# looks across sites to compile data
-compile_allXdat <- function(all_siteXpoll){
-  
-  for(i_site in 1:length(all_siteXpoll$meta$site)){
-    
-    site_name <- all_siteXpoll$meta$site[i_site] # 3 letter site code
-    
-    print('---------------------')
-    print(paste0('processing:', site_name))
-    print(paste0('n = ', i_site, ' out of ', length(all_siteXpoll$meta$site)))
-    print('---------------------')
-    
-    # initialization used to control for failed api calls
-    data_aqs     <- as.data.frame(-9999)
-    data_envista <- as.data.frame(-9999)
-    data_merge   <- as.data.frame(-9999)
-    
-    # get the data - wrapped in try if query fails --> check below
-    options(show.error.messages = TRUE)
-    print("Try getting AQS data: line 22 in merge_records.R")
-    try({data_aqs <- get_aqs_dat(all_siteXpoll, i_site)}, silent = FALSE)
-    print("Try getting envista data: line 24 in merge_records.R")
-    try({data_envista <- get_envista_dat(all_siteXpoll, i_site)}, silent = FALSE)
-    # try({all_siteXpoll$api_data$data_aqs <- get_aqs_dat(all_siteXpoll, i_site)}, silent = TRUE)
-    # try({all_siteXpoll$api_data$data_envista <- get_envista_dat(all_siteXpoll, i_site)}, silent = TRUE)
-    # } end compile_allXdat ???
-    # end compile dat here?
-    
-    # new funcition below
-    # control flow: check if query returned results 
-    if(exists('data_aqs')){
-      if(dim(data_aqs)[2] > 1){
-          do_aqs <- TRUE
-        } else {
-          do_aqs <- FALSE
-          print("aqs has no data for:")
-          print(all_siteXpoll$meta[i_site,])}
-    } else {
-      do_aqs <- FALSE
-      print("aqs has no data for:")
-      print(all_siteXpoll$meta[i_site,])}
-    
-    if(exists('data_envista')){
-      if(dim(data_envista)[2] > 1){
-        do_envista <- TRUE
-      } else {
-        do_envista <- FALSE
-        print("envista has no data for:")
-        print(all_siteXpoll$meta[i_site,])}
-    } else {
-      do_envista <- FALSE
-      print("envista has no data for:")
-      print(all_siteXpoll$meta[i_site,])}
-    
-    # data_merge is a df & is all or one dataset depending on queries
-    if(do_aqs & do_envista){
-      data_merge <- homogenize_datastreams(data_aqs, data_envista)
-    } else if (do_aqs & !do_envista){
-      data_merge <- choose_datastream(data_aqs, 'aqs_only')
-    } else if (!do_aqs & do_envista){
-      data_merge <- choose_datastream(data_envista, 'envista_only')
-    } else {
-      print(paste0('Some aqs and/or envista data were not available for: ', site_name))
-      data_merge <- blank_datastream()} # end if(do_aqs & do_envista)
-    
-    # add the site name to the data
-    data_merge$site <- site_name
-    
-    if(i_site == 1){
-      dat_package <- data_merge
-    } else {
-      try({dat_package <- bind_rows(dat_package, data_merge)}, silent = TRUE)
-      }
-    
-  }
-  
-  #now put the packaged data into deq_dat
-  all_siteXpoll$data <- dat_package
-    
-  return(all_siteXpoll)}
 
 # make one datastream from aqs and envista data
 homogenize_datastreams <- function(data_aqs, data_envista){
@@ -138,13 +58,7 @@ homogenize_datastreams <- function(data_aqs, data_envista){
  # add lat and long 
   data_merge <- data_merge %>% select(datetime, sample_measurement_best, units_of_measure_best, qualifier_best, simple_qual_best, source_best, poc_best,
                                      method_code_best, parameter_best, sample_measurement_aqs, sample_measurement_envista, latitude, longitude)
-  
-  # data_merge <- data_merge %>% select(datetime, sample_measurement_best, units_of_measure_best, qualifier_best, simple_qual_best, source_best, poc_best, 
-  #                                     method_code_best, parameter_best, sample_measurement_aqs, sample_measurement_envista)
-  
-  # can we remove this - should have been done in universal format function & above
-  # names(data_merge) <- c('datetime', 'sample_measurement_best', 'units_of_measure_best', 'qualifier_best', 'simple_qual_best', 'source_best', 'poc_best',
-  #                                'method_code', 'parameter', 'sample_measurement_aqs', 'sample_measurement_envista')
+
   
   return(data_merge)}
 
@@ -182,16 +96,12 @@ choose_datastream <- function(data, aqs_or_envista){
   header <- c('datetime', 'sample_measurement_best', 'units_of_measure_best', 'qualifier_best', 'simple_qual_best', 'source_best', 'poc_best',
              'method_code', 'parameter', 'sample_measurement_aqs', 'sample_measurement_envista', 'latitude', 'longitude')
   
-  # header <- c('datetime', 'sample_measurement_best', 'units_of_measure_best', 'qualifier_best', 'simple_qual_best', 'source_best', 'poc_best',
-  #             'method_code', 'parameter', 'sample_measurement_aqs', 'sample_measurement_envista')
 
   if(dim(data_merge)[1] != 0){
     # add lat and long
     data_merge <- data_merge %>% select(datetime, sample_measurement_best, qualifier_best, simple_qual_best, source_best, poc_best,
                                         method_code_best, parameter_best, sample_measurement_aqs, sample_measurement_envista, latitude, longitude)
-    
-    # data_merge <- data_merge %>% select(datetime, sample_measurement_best, qualifier_best, simple_qual_best, source_best, poc_best,
-    #                                     method_code_best, parameter_best, sample_measurement_aqs, sample_measurement_envista)
+
     } else { 
     data_merge <- as.data.frame(matrix(ncol = length(header), nrow = 1)) 
     }
@@ -206,12 +116,88 @@ blank_datastream <- function(){
   # add lat and long
   header <- c('datetime', 'sample_measurement_best', 'units_of_measure_best', 'qualifier_best', 'simple_qual_best', 'source_best', 'poc_best',
               'method_code', 'parameter', 'sample_measurement_aqs', 'sample_measurement_envista', 'latitude', 'longitude')
-  
-  # header <- c('datetime', 'sample_measurement_best', 'units_of_measure_best', 'qualifier_best', 'simple_qual_best', 'source_best', 'poc_best',
-  #             'method_code', 'parameter', 'sample_measurement_aqs', 'sample_measurement_envista')
+
   
   data_merge <- as.data.frame(matrix(ncol = length(header), nrow = 1))
   
   names(data_merge) <- header
   
   return(data_merge)}
+
+
+# looks across sites to compile data
+compile_allXdat <- function(all_siteXpoll){
+  
+  for(i_site in 1:length(all_siteXpoll$meta$site)){
+    
+    site_name <- all_siteXpoll$meta$site[i_site] # 3 letter site code
+    
+    print('---------------------')
+    print(paste0('processing:', site_name))
+    print(paste0('n = ', i_site, ' out of ', length(all_siteXpoll$meta$site)))
+    print('---------------------')
+    
+    # initialization used to control for failed api calls
+    data_aqs     <- as.data.frame(-9999)
+    data_envista <- as.data.frame(-9999)
+    data_merge   <- as.data.frame(-9999)
+    
+    # get the data - wrapped in try if query fails --> check below
+    options(show.error.messages = TRUE)
+    print("Try getting AQS data: line 22 in merge_records.R")
+    try({data_aqs <- get_aqs_dat(all_siteXpoll, i_site)}, silent = FALSE)
+    print("Try getting envista data: line 24 in merge_records.R")
+    try({data_envista <- get_envista_dat(all_siteXpoll, i_site)}, silent = FALSE)
+    
+    # new funcition below
+    # control flow: check if query returned results 
+    if(exists('data_aqs')){
+      if(dim(data_aqs)[2] > 1){
+        do_aqs <- TRUE
+      } else {
+        do_aqs <- FALSE
+        print("aqs has no data for:")
+        print(all_siteXpoll$meta[i_site,])}
+    } else {
+      do_aqs <- FALSE
+      print("aqs has no data for:")
+      print(all_siteXpoll$meta[i_site,])}
+    
+    if(exists('data_envista')){
+      if(dim(data_envista)[2] > 1){
+        do_envista <- TRUE
+      } else {
+        do_envista <- FALSE
+        print("envista has no data for:")
+        print(all_siteXpoll$meta[i_site,])}
+    } else {
+      do_envista <- FALSE
+      print("envista has no data for:")
+      print(all_siteXpoll$meta[i_site,])}
+    
+    # data_merge is a df & is all or one dataset depending on queries
+    if(do_aqs & do_envista){
+      data_merge <- homogenize_datastreams(data_aqs, data_envista)
+    } else if (do_aqs & !do_envista){
+      data_merge <- choose_datastream(data_aqs, 'aqs_only')
+    } else if (!do_aqs & do_envista){
+      data_merge <- choose_datastream(data_envista, 'envista_only')
+    } else {
+      print(paste0('Some aqs and/or envista data were not available for: ', site_name))
+      data_merge <- blank_datastream()} # end if(do_aqs & do_envista)
+    
+    # add the site name to the data
+    data_merge$site <- site_name
+    
+    if(i_site == 1){
+      dat_package <- data_merge
+    } else {
+      try({dat_package <- bind_rows(dat_package, data_merge)}, silent = TRUE)
+    }
+    
+  }
+  
+  #now put the packaged data into deq_dat
+  all_siteXpoll$data <- dat_package
+  
+  return(all_siteXpoll)}

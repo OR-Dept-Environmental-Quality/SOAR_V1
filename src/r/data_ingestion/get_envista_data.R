@@ -28,6 +28,7 @@ get_aqi_param <- function(station, channel, from, to, time_base = 60) {
 
 
 # does the envista data call, and light api formatting for use 
+# Check the Miro board. 'siteXpoll' is a metadata table created for the special quer by the user
 get_envista_dat <- function(siteXpoll, i_site){
 
   # identify call

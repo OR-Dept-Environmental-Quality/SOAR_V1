@@ -10,3 +10,10 @@ Envista
 
 It collects data for specific parameters listed in:
 📄 data/reference/analyteXcode.csv
+
+
+please see the miro board using the following link:
+
+https://miro.com/app/board/uXjVPL4Eie8=/
+
+if you don't have access, let me know (Neda)

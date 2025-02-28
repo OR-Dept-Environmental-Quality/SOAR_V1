@@ -2,8 +2,9 @@ SOAR_V1
 SOAR is a data-driven resource that helps Oregonians understand air quality issues and engage in finding solutions to 
 improve air quality in their communities. It offers a web-based portal that centralizes all air quality information.
 
-This database can be integrated with a Power BI dashboard to generate various summary reports and visualizations, 
-providing insights into air quality trends and related data.
+This database can be integrated with a Power BI dashboard to generate various summary reports and visualizations, providing insights into air quality trends and related data.
+
+For now, no visualizations have been added to the R packages.
 
 ************************************************************************************************************************S
 📌 important Notes:
@@ -44,7 +45,7 @@ Securely load JSON using jsonlite.
 ************************************************************************************************************************
 
 📌 Overview
-The Ozone_DB R package allows users to pull hourly data () for the following parameters over a specified period:
+The Ozone_DB R package allows users to pull hourly data for the following parameters over a specified period:
 
 Criteria Air Pollutants
 PM₂.₅
@@ -105,35 +106,38 @@ including those developed for ozone analysis.
 
 📌 Features
 ✔ Standardized Data Output
-
 Returns data in a uniform format
 Manages data compilation and formatting from AQS & Envista, making it analysis-ready
-✔ Envista & AQS Data Comparison
 
+
+✔ Envista & AQS Data Comparison
 Enables direct comparison of AQS & Envista datasets:
 in the hourly database, both extracted values from aqs and ENvista are saved under the 
 "sample_measurement_aqs" & "sample_measurement_envista"
 
 Helps verify data integrity and confirm correct data loading
-✔ Unified API Calls
 
+
+✔ Unified API Calls
 Standardizes parameters, sites, and time periods for AQS & Envista
 Reduces confusion and errors due to API differences
-✔ Enhanced Data Retrieval
 
+
+✔ Enhanced Data Retrieval
 Supports data sources like SensOR, available in Envista but not AQS
 Enables access to historical data (pre-2018), which is missing in Envista
-✔ Power BI Integration
 
+
+✔ Power BI Integration
 Allows users to query, visualize, and analyze air quality data dynamically
 Generates real-time and historical insights into air pollution trends
 Customizable dashboards for different regions and pollutants
+
 
 📌 Key Challenges in Merging AQS & Envista Data
 These scripts tackle critical issues when merging two distinct air quality databases:
 
 1️⃣ Column Name & Data Type Differences
-
 AQS & Envista use different column names and data types (e.g., character vs. numeric values).
 The Envista-to-AQS data mapping can be found in the "analyteXcode.csv" file located at:
 
@@ -164,25 +168,27 @@ AqsName: The name AQS uses for the pollutant
 Additionally, the user can call the parameter in main.R if it is already included in this table.
 
 
-2️⃣ Time Conversions
 
+2️⃣ Time Conversions
 AQS timestamps mark the beginning of the hour
 Envista timestamps mark the end of the hour
 The scripts align timestamps for consistency.
 The timestamps in the hourly database align with AQS standards, meaning they are recorded at the beginning of each hour.
 As a result, the hourly database starts at 00:00 and ends at 23:00 each day (needs code reviewers attention for further validation).
 
-3️⃣ Metadata Differences in API Calls
 
+3️⃣ Metadata Differences in API Calls
 AQS & Envista use different metadata structures in API queries
 The scripts bridge these differences to standardize API calls.
 
-4️⃣ Parameter Naming & Qualifiers
 
+
+4️⃣ Parameter Naming & Qualifiers
 AQS & Envista use different parameter names/codes
 Different metadata qualifiers (IDs or character codes) are needed for API calls
 The scripts create a crosswalk between AQS & Envista parameters for consistency
 These challenges are automatically handled in Power BI, allowing users to focus on insights rather than data processing.
+
 
 📌 Power BI Dashboard Features
 By connecting the database to Power BI, users can:

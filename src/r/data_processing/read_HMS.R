@@ -11,6 +11,9 @@ library(ggplot2)
 # my path to read PM2.5 DB from DataRepo located on Air Data Team sharepoint 
 root_path <- "C:/Users/nkhosra/Oregon/DEQ - Air Data Team - OzoneDB/test_DB_PM2.5_summer_2024/"
 
+source('./src/r/utils/support_func.R')       # create cross tables
+
+
 
 read_kml <- function(date, url, layer, state_sf_transformed, sub_dailypm25) {
   # url <- paste0("https://satepsanone.nesdis.noaa.gov/pub/FIRE/web/HMS/Smoke_Polygons/KML/", 
@@ -96,117 +99,110 @@ smoke_level <- c()  # Empty vector to store appended texts
 
 #****************************  load daily_pm25 ****************
 #*if the raw data was uploaded 
-daily_pm25 <- read.csv(paste0(root_path, "DB/first_DB_PM2.5_dailyRAW.csv"))
+# daily_pm25 <- read.csv(paste0(root_path, "DB/first_DB_PM2.5_dailyRAW.csv"))
 
 
 #*#start expand DB to include more metadata, then date and time variables needs to be extracted 
-daily_pm25 <- add_time_intervals_daily (daily_pm25)
-
-
-
-date_index <- which(
-  daily_pm25$month %in% 6:9 |  # June to September (all days)
-    (daily_pm25$month == 10 & daily_pm25$day2foc <= 25)  # October 1-25
-)
-
-
-dates_filtered <- unique (daily_pm25$date[date_index]) 
-
-
-for ( index in 1:length(dates_filtered) ){
+add_time_intervals_daily <- function(daily_pm25 = NULL) {
+  if (is.null(daily_pm25)) {
+    stop("Error: daily_pm25 argument is missing or incorrect")
+  }
   
-  print(index) 
+  # Filter dates between June and October 25
+  date_index <- which(
+    daily_pm25$month %in% 6:9 |  # June to September (all days)
+      (daily_pm25$month == 10 & daily_pm25$day2foc <= 25)  # October 1-25
+  )
   
-  focdate <- dates_filtered [[index]]
-  print(focdate)
+  dates_filtered <- unique(daily_pm25$date[date_index])
   
-  sub_dailypm25 <- daily_pm25 %>% filter (date == focdate) %>% select ( c('date', 'site', 'longitude', 'latitude') ) 
+  # Initialize storage for results
+  HMS_list <- data.frame()
   
-  url <- paste0("https://satepsanone.nesdis.noaa.gov/pub/FIRE/web/HMS/Smoke_Polygons/KML/",
-                format(focdate, "%Y/%m/hms_smoke"), format(focdate, "%Y%m%d"), ".kml")
-  
-  # Step 1: List all the layers in the KML file
-  layers_info <- tryCatch({
-    st_layers(url)
-  }, error = function(e) {
-    print(paste("Error loading KML for date", focdate, ":", e))
-    return(NULL)
-  })
-  
-  if (!is.null(layers_info)) {  
-    print(layers_info)
+  for (index in seq_along(dates_filtered)) {
     
-    # Extract the layer names
-    for ( layer in layers_info$name ){
+    focdate <- dates_filtered[index]
+    print(paste("Processing date:", focdate))
+    
+    sub_dailypm25 <- daily_pm25 %>%
+      filter(date == focdate) %>%
+      select(date, site, longitude, latitude)
+    
+    url <- paste0("https://satepsanone.nesdis.noaa.gov/pub/FIRE/web/HMS/Smoke_Polygons/KML/",
+                  format(focdate, "%Y/%m/hms_smoke"), format(focdate, "%Y%m%d"), ".kml")
+    
+    # Step 1: Get KML layers safely
+    layers_info <- tryCatch({
+      st_layers(url)
+    }, error = function(e) {
+      message(paste("Error loading KML for date", focdate, ":", e))
+      return(NULL)
+    })
+    
+    if (!is.null(layers_info)) {  
+      print("Layers found:")
+      print(layers_info$name)
       
-      # if (layer == "Smoke (Light)") {
-      all_data <- NULL
+      # Initialize smoke category lists
+      light_smoke <- data.frame()
+      medium_smoke <- data.frame()
+      heavy_smoke <- data.frame()
       
-      # print(paste("Processing", format (focdate, '%Y-%m-%d'), 'for', layer))
-      
-      all_data <- read_kml (focdate, url, layer, state_sf_transformed, sub_dailypm25)
-      
-      # View (all_data)
-      
-      if (!is.null(all_data) && nrow(all_data) != 0) {
+      for (layer in layers_info$name) {
+        message(paste("Processing layer:", layer, "for", focdate))
         
-        if ( layer == "Smoke (Light)" && is.null(light_smoke) ){
-          light_smoke <- all_data
-        } else if ( layer == "Smoke (Light)" && !is.null("light_smoke") ){
-          light_smoke <- bind_rows ( all_data, light_smoke ) 
-        }
+        all_data <- tryCatch({
+          read_kml(focdate, url, layer, state_sf_transformed, sub_dailypm25)
+        }, error = function(e) {
+          message(paste("Error reading KML for layer", layer, ":", e))
+          return(NULL)
+        })
         
-        if ( layer == "Smoke (Medium)" && !is.null("medium_smoke") ){
-          medium_smoke <- all_data
-        } else if ( layer == "Smoke (Medium)" && is.null("medium_smoke") ){
-          medium_smoke <- bind_rows ( all_data, medium_smoke ) 
-        }
-        
-        if ( layer == "Smoke (Heavy)" && !is.null("heavy_smoke") ){
-          heavy_smoke <- all_data
-        } else if ( layer == "Smoke (Medium)" && is.null("medium_smoke") ){
-          heavy_smoke <- bind_rows ( all_data, heavy_smoke ) 
+        if (!is.null(all_data) && nrow(all_data) > 0) {
+          if (layer == "Smoke (Light)") {
+            light_smoke <- bind_rows(light_smoke, all_data)
+          } else if (layer == "Smoke (Medium)") {
+            medium_smoke <- bind_rows(medium_smoke, all_data)
+          } else if (layer == "Smoke (Heavy)") {
+            heavy_smoke <- bind_rows(heavy_smoke, all_data)
+          }
         }
       }
     }
+    
+    # Process site-based smoke levels
+    for (site in sub_dailypm25$site) {
+      smoke_level <- c()
+      
+      if (site %in% light_smoke$site) {
+        smoke_level <- c(smoke_level, "Smoke (Light)")
+      }
+      if (site %in% medium_smoke$site) {
+        smoke_level <- c(smoke_level, "Smoke (Medium)")
+      }
+      if (site %in% heavy_smoke$site) {
+        smoke_level <- c(smoke_level, "Smoke (Heavy)")
+      }
+      
+      smoke_level <- paste(smoke_level, collapse = ", ")
+      
+      HMS <- data.frame(focdate = focdate, site = site, smoke_level = smoke_level)
+      
+      HMS_list <- bind_rows(HMS_list, HMS)
+    }
   }
   
-  for ( site in sub_dailypm25$site ) {
-    
-    smoke_level <- c()
-    
-    if ( site %in% light_smoke$site ) {
-      smoke_level <- c (smoke_level, "Smoke (Light)")
-    }
-    
-    if ( site %in% medium_smoke$site ) {
-      smoke_level <- c (smoke_level,  "Smoke (Medium)")
-    }
-    
-    if ( site %in% heavy_smoke$site ) {
-      smoke_level <- c (smoke_level,  "Smoke (Heavy)")
-    }
-    
-    smoke_level <- paste(smoke_level, collapse = ", ")
-    
-    print(paste(site, smoke_level))
-    
-    HMS <- data.frame(focdate = focdate, site = site, smoke_level = smoke_level)
-    
-    if (!exists("HMS_list")) {
-      HMS_list <- HMS 
-    } else {
-      HMS_list <- bind_rows(HMS, HMS_list)  
-    }
-  }
-}  
+  colnames(HMS_list)[colnames(HMS_list) == 'focdate']  <- 'date'
+  HMS_list$smoke_level[HMS_list$smoke_level == ""] <- NA
+  
+  HMS_list <- HMS_list %>% distinct(site, date, .keep_all = TRUE)
+  
+  return(HMS_list)
+}
 
-colnames(HMS_list)[colnames(HMS_list) == 'focdate']  <- 'date'
-HMS_list$smoke_level[HMS_list$smoke_level == ""] <- NA
 
-HMS_list <- HMS_list %>% distinct(site, date, .keep_all = TRUE)
 
-write.xlsx(HMS_list, file = paste0(root_path, "Supplemental_Data/output_review/HMS_daily.xlsx", rowNames = FALSE))
+# write.xlsx(HMS_list, file = paste0(root_path, "Supplemental_Data/output_review/HMS_daily.xlsx", rowNames = FALSE))
 
 
 

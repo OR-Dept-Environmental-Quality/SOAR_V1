@@ -12,11 +12,11 @@ DoRequest <- function(http2get){
 
 # query for monitors in Oregon
 #ask to gather credentials,state code, parameter code, time period
-get_aqs_monitors <- function(state2get, params2get, StDate, EdDate, SIGNIN){
+get_aqs_monitors <- function(state2get, params2get, StDate, EdDate, SIGNIN_AQS){
   paste0("https://aqs.epa.gov/data/api/",
          "monitors/byState?",
-         "email=", SIGNIN[[1]],
-         "&key=", SIGNIN[[2]],
+         "email=",  SIGNIN_AQS$email,
+         "&key=",   SIGNIN_AQS$api_key,
          "&param=", params2get,
          "&bdate=", StDate,
          "&edate=", EdDate,
@@ -27,7 +27,7 @@ get_aqs_monitors <- function(state2get, params2get, StDate, EdDate, SIGNIN){
 # Check the Miro board. 'siteXpoll' is a metadata table created for the special quer by the user
 get_aqs_dat <- function(siteXpoll, i_site){
   
-  if(exists('d_aqs')){rm(d_aqs)}
+  # if(exists('d_aqs')){rm(d_aqs)}
      
   # location
   state  <- substr(siteXpoll$meta$epa_id[i_site],1,2)
@@ -38,7 +38,6 @@ get_aqs_dat <- function(siteXpoll, i_site){
   param2foc <- siteXpoll$meta$poll_aqs[i_site]
   
   #test the error
-  View(siteXpoll$meta)
   print(paste0('>>>>>>>>>>>>>>>>>>>>>>>>>>>',str(siteXpoll$meta$from_date[i_site])))
   print(paste0('***************************',str(siteXpoll$meta$to_date[i_site])))
   
@@ -46,7 +45,7 @@ get_aqs_dat <- function(siteXpoll, i_site){
   StDate <- siteXpoll$meta$from_date[i_site]
   EdDate <- siteXpoll$meta$to_date[i_site]
   
-  aqs_request <- build_aqs_calls(state, county, site, param2foc, StDate, EdDate, SIGNIN)
+  aqs_request <- build_aqs_calls(state, county, site, param2foc, StDate, EdDate, SIGNIN_AQS)
   
   for(i_call in aqs_request){
     if(!exists('d_aqs')){d_aqs <- DoRequest(i_call)
@@ -60,7 +59,7 @@ get_aqs_dat <- function(siteXpoll, i_site){
   return(d_aqs)}
 
 # support get_aqs_dat - formats api calls
-build_aqs_calls <- function(state, county, site, param2foc, StDate, EdDate, SIGNIN){
+build_aqs_calls <- function(state, county, site, param2foc, StDate, EdDate, SIGNIN_AQS){
   
   aqi_call <- list()
   all_year <- c(year(StDate):year(EdDate))
@@ -81,8 +80,8 @@ build_aqs_calls <- function(state, county, site, param2foc, StDate, EdDate, SIGN
     
     i_aqi_call <- paste0("https://aqs.epa.gov/data/api/",
                          "sampleData/bySite?",
-                         "email=",   SIGNIN[[1]],
-                         "&key=",    SIGNIN[[2]],
+                         "email=",   SIGNIN_AQS$email,
+                         "&key=",    SIGNIN_AQS$api_key,
                          "&param=",  param2foc,
                          "&bdate=",  i_stDate,
                          "&edate=",  i_edDate,

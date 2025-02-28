@@ -3,20 +3,44 @@ library(lubridate)
 library(openxlsx)
 library(zoo)
 library(purrr)
+library(jsonlite)
+library(svDialogs)  # For GUI input dialogs
+
+
 
 #ask user to define the "root_path" on the local system
 #root_path <- ??
 
-source('./pass/pass.R') # needs Aida attention & comments ????????
+# Function to securely load credentials from JSON
+load_credentials <- function(credentials_file = "credentials.json") {
+  fromJSON(credentials_file)
+}
 
-# supporting tools
-file.sources = list.files('./src/r/data_processing/', pattern="*.R")
-sapply(paste0(file.sources),source)
+# Load all credentials
+CREDENTIALS <- load_credentials()
+
+# Access AQS credentials separately
+SIGNIN_AQS <- CREDENTIALS$AQS
+
+# Extract Envista credentials
+SIGNIN_ENVISTA <- CREDENTIALS$Envista
+
+# Extract Oregon API base URL (if needed)
+baseurl <- CREDENTIALS$OregonAPI$baseurl
+
+
+# Supporting tools: Load all R scripts from the specified directory
+file.sources <- list.files('./src/r/data_processing/', pattern = "\\.R$", full.names = TRUE)
+
+# Source the files only if they exist
+sapply(file.sources, function(f) {
+  if (file.exists(f)) source(f)
+})
 
 # needs edits after reorganizing folders/structure
-source('./src/r/data_ingestions/get_envista_data.R') # get envista data
-source('./src/r/data_ingestions/get_aqs_data.R')     # get aqs data
-source('./src/r/data_ingestions/load_links.R')       # create cross tables
+source('./src/r/data_ingestion/get_envista_data.R') # get envista data
+source('./src/r/data_ingestion/get_aqs_data.R')     # get aqs data
+source('./src/r/data_ingestion/load_links.R')       # create cross tables
 source('./src/r/utils/support_func.R')       # create cross tables
 
 
@@ -66,41 +90,60 @@ cross_tables <- loadXlink('./data/reference/')
 # I edited the excel sheet Anthony mainatined to be able to merge this meta data with RAW measurements correctly
 aqm_monitors_localsys <- cross_tables$aqm_sites # this is siteXepaid_crosstable.csv
 
-#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  end of creating meta data   <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-# # Prompt user for input dates
-# cat("Please provide the 'from_date' (format: YYYY/MM/DD): ")
-# from_date <- readline()
-# 
-# cat("Please provide the 'to_date' (format: YYYY/MM/DD): ")
-# to_date <- readline()
-# 
-# # Validate user inputs (optional)
-# if (!grepl("^\\d{4}/\\d{2}/\\d{2}$", from_date) || !grepl("^\\d{4}/\\d{2}/\\d{2}$", to_date)) {
-#   stop("Invalid date format. Please use 'YYYY/MM/DD'.")
-# }
-# 
-# # Ensure from_date is earlier than to_date
-# if (as.Date(from_date) > as.Date(to_date)) {
-#   stop("'from_date' cannot be later than 'to_date'.")
-# }
+get_user_input <- function() {
+  # Open a dialog box for start date
+  from_date <- dlg_input("Enter start date (YYYY-MM-DD):")$res
+  from_date <- as.Date(from_date, "%Y-%m-%d")
+  
+  # Open a dialog box for end date
+  to_date <- dlg_input("Enter end date (YYYY-MM-DD):")$res
+  to_date <- as.Date(to_date, "%Y-%m-%d")
+  
+  # Validate date input
+  if (is.na(from_date) | is.na(to_date)) {
+    stop("Invalid date format. Please enter dates in YYYY-MM-DD format.")
+  }
+  
+  # Convert to required format (`YYYY/MM/DD`)
+  from_date <- format(from_date, "%Y/%m/%d")
+  to_date <- format(to_date, "%Y/%m/%d")
+  
+  # Open a selection box for choosing parameters
+  selected_params <- dlg_list(param_list, multiple = TRUE, title = "Select Parameters")$res
+  
+  # Ensure user selects at least one parameter
+  if (length(selected_params) == 0) {
+    stop("You must select at least one parameter.")
+  }
+  
+  return(list(from_date = from_date, to_date = to_date, parameters = selected_params))
+}
+
+
+
+#***********************************************************************************************************************
+# Get user input via dialog boxes
+#the user can choose more than one parameter
+user_input <- get_user_input()
+
 
 
 #OR
 
 # Define the date range variables 
-from_date <- '2021/01/01'
-to_date   <- '2024/10/31'
+# from_date <- '2024/06/01'
+# to_date   <- '2024/10/31'
 
 # Inform the user about the current date range
-cat("Using date range:", from_date, "to", to_date, "\n")
+cat("Using date range:", user_input$from_date, "to", user_input$to_date, "\n")
 
 
 # Initialize dat_out outside the loop to store all results
 dat_out <- list(data = NULL, meta = NULL)  # Empty tibbles to avoid NULL issues
 
 for (type in param_list) {
-  if (type %in% c("pm2.5l_bam1022", "pm2.5 estimate", "pm2.5 est sensor")) {
+  if (type %in% user_input$parameters) {
     
     print(paste("Processing:", type))
     
@@ -112,8 +155,8 @@ for (type in param_list) {
     # Request data
     dat_request <- deq_dat(site = sub_meta$shortName, 
                            poll_name = type, 
-                           from_date = from_date, 
-                           to_date = to_date,
+                           from_date = user_input$from_date, 
+                           to_date = user_input$to_date,
                            monitoring_list = sub_meta)
     
     # Compile data
@@ -141,7 +184,7 @@ for (type in param_list) {
 
 
 hourly_pm25 <- dat_out$data
-
+View(hourly_pm25)
 # I had qualifer 53 and since it was not labled in the "envista_api_qualifier_code.csv", it's simple_qual_best was 
 # "character(0)" or NA or empty strings, I replaced it with "ok", ask Peter & Anthony
 hourly_pm25$simple_qual_best[hourly_pm25$simple_qual_best == "character(0)" ] <- "ok"

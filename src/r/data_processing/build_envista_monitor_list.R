@@ -8,7 +8,7 @@ library(stringr)
 get_regions <- function (){
   
   q <- paste0(baseurl, 'v1/envista/regions')
-  resp <- GET(q, authenticate(username, passwd))
+  resp <- GET(q, authenticate(SIGNIN_ENVISTA$username, SIGNIN_ENVISTA$password))
   regions   <- fromJSON(content(resp, type = "text", encoding = "UTF-8")) # was encoding = "ISO-8859-1" awf 20OCT2022
   
   colnames(regions)[colnames(regions) == 'name'] <- 'regions'
@@ -20,7 +20,7 @@ get_envita_stations <- function() {
   
   q <- paste0(baseurl, "v1/envista/stations")
   
-  resp <- GET(q, authenticate(username, passwd))
+  resp <- GET(q, authenticate(SIGNIN_ENVISTA$username, SIGNIN_ENVISTA$password))
   # resp  ## need to check status code
   df <- fromJSON(content(resp, type = "text", encoding = "UTF-8"))
   
@@ -36,7 +36,7 @@ get_aqi_param <- function(station, channel, from, to, time_base = 60) {
   q <- paste0(baseurl, "v1/envista/stations/", station, "/data/", channel,"?from=", from, "&to=", to, "&timebase=", time_base)
   #  https://oraqiapi.deq.state.or.us/v1/envista/stations/2/data/3?from=2018/12/07&to=2018/12/09&timebase=5
   
-  resp <- GET(q, authenticate(username, passwd))
+  resp <- GET(q, authenticate(SIGNIN_ENVISTA$username, SIGNIN_ENVISTA$password))
   df <- fromJSON(content(resp, type = "text", encoding = "UTF-8"))
   
   return(df)}

@@ -21,12 +21,12 @@ hcatm <- data.frame(hcat = factor(c("Good", "Moderate", "USG", "Unhealthy", "Ver
 
 ## AQI table for PM2.5
 ## AQI calculations based on 2016 EPA Technical doc
-## conc   0.0 - 12.0   AQI   0 - 50
-## conc  12.1 - 35.4   AQI  51 - 100
+## conc   0.0 - 09.0   AQI   0 - 50
+## conc  09.1 - 35.4   AQI  51 - 100
 ## conc  35.5 - 55.4   AQI 101 - 150
-## conc  55.5 - 150.4  AQI 151 - 200
-## conc 150.5 - 250.4  AQI 201 - 300
-## conc 250.5 - 350.4  AQI 301 - 400
+## conc  55.5 - 125.4  AQI 151 - 200
+## conc 125.5 - 225.4  AQI 201 - 300
+## conc 225.5 - 350.4  AQI 301 - 400
 ## conc 350.5 - 500.4  AQI 401 - 500
 bplo <- c( 0.0, 9.1, 35.5,  55.5, 125.5, 225.5, 350.5, 500.5)
 bphi <- c(9.0, 35.4, 55.4, 125.4, 225.4, 350.4, 500.4, 99999.9)

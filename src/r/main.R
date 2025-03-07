@@ -137,7 +137,7 @@ get_user_input <- function() {
     
     # Validate date input
     if (is.na(from_date) | is.na(to_date)) {
-      stop("Invalid date format. Please enter dates in YYYY-MM-DD format.")
+      stop("Invalid date format. Please enter dates in YYYY/MM/DD format.")
     }
   } else {
     stop("No valid selection made.")
@@ -194,13 +194,15 @@ get_user_input <- function() {
   }
   
   return(list(
-    from_date = from_date, 
-    to_date = to_date, 
+    from_date = format(as.Date(from_date, tryFormats = c("%Y/%m/%d", "%Y-%m-%d")), "%Y/%m/%d"),  # Ensures correct format for API
+    to_date   = format(as.Date(to_date, tryFormats = c("%Y/%m/%d", "%Y-%m-%d")), "%Y/%m/%d"),     # Ensures correct format for API
     criteria_pollutants = selected_criteria_pollutants, 
     meteorological_data = selected_meteorological_data, 
     HMS_list = HMS_list
   ))
+  
 }
+
 
 
 # Get user input via dialog boxes
@@ -211,107 +213,9 @@ user_input <- get_user_input()
 # Modify the file names based on the selection
 # Inform the user about the current date range
 cat("Using date range:", user_input$from_date, "to", user_input$to_date, "\n")
- Start API requests to retrieve HOURLY data from AQS and Envista
-#make a table of Envista meta data
-get_user_input <- function() {
-  # Ask the user if they want a yearly or monthly export
-  export_type <- dlg_list(c("Yearly", "Monthly"), title = "Select Export Type")$res
-  
-  if (export_type == "Yearly") {
-    # Ask user for a year (from 2000 to the current year)
-    current_year <- as.numeric(format(Sys.Date(), "%Y"))
-    year_options <- as.character(seq(2000, current_year, by = 1))
-    
-    selected_year <- dlg_list(year_options, title = "Select Year")$res
-    
-    # Set the date range to the full year
-    from_date <- as.Date(paste0(selected_year, "-01-01"))
-    to_date <- as.Date(paste0(selected_year, "-12-31"))
-    
-  } else if (export_type == "Monthly") {
-    # Ask for custom start and end dates
-    from_date <- as.Date(dlg_input("Enter start date (YYYY-MM-DD):")$res, "%Y-%m-%d")
-    to_date <- as.Date(dlg_input("Enter end date (YYYY-MM-DD):")$res, "%Y-%m-%d")
-    
-    # Validate date input
-    if (is.na(from_date) | is.na(to_date)) {
-      stop("Invalid date format. Please enter dates in YYYY-MM-DD format.")
-    }
-  } else {
-    stop("No valid selection made.")
-  }
-  
-  # ✅ Ask user if they want to select parameters from each category
-  select_criteria <- dlg_message("Do you want to select Criteria Pollutants?", type = "yesno")$res
-  select_meteorology <- dlg_message("Do you want to select Meteorological Data?", type = "yesno")$res
-  
-  # Initialize empty parameter lists
-  selected_criteria_pollutants <- character(0)
-  selected_meteorological_data <- character(0)
-  
-  # If user chooses to select criteria pollutants
-  if (select_criteria == "yes") {
-    selected_criteria_pollutants <- dlg_list(criteria_pollutants, multiple = TRUE, title = "Select Criteria Pollutants")$res
-  }
-  
-  # If user chooses to select meteorological data
-  if (select_meteorology == "yes") {
-    selected_meteorological_data <- dlg_list(meteorological_data, multiple = TRUE, title = "Select Meteorological Data")$res
-  }
-  
-  # Ensure at least one parameter is selected
-  if (length(selected_criteria_pollutants) == 0 && length(selected_meteorological_data) == 0) {
-    stop("You must select at least one parameter from either category.")
-  }
-  
-  # Convert dates to year and month for checking HMS availability
-  months_selected <- seq(from_date, to_date, by = "month") %>% month()
-  selected_year <- format(from_date, "%Y")  # Extract year
-  
-  # ✅ Check if HMS data is needed (Only if Criteria Pollutants are selected & Date range includes June-October)
-  if (length(selected_criteria_pollutants) > 0 && any(months_selected %in% 6:10)) {
-    message("📌 User selected Criteria Pollutants & a date range that includes June to October. Retrieving HMS data...")
-    
-    # Try to load the HMS data if it exists
-    hms_file_path <- paste0(root_path, "Supplemental_Data/HMS_daily_", selected_year, ".xlsx")
-    
-    if (file.exists(hms_file_path)) {
-      HMS_list <- read.xlsx(hms_file_path, colNames = TRUE, detectDates = TRUE)
-      message("✅ HMS data loaded from file: ", hms_file_path)
-    } else {
-      message("⚠️ No existing HMS file found. Generating HMS data...")
-      HMS_list <- add_HMS_levels_daily(daily_pm25)
-      
-      # Save the generated HMS data
-      write.xlsx(HMS_list, file = hms_file_path, rowNames = FALSE)
-      message("✅ HMS data successfully saved to: ", hms_file_path)
-    }
-  } else {
-    message("❌ HMS data is not required (No Criteria Pollutants selected OR Dates outside June-October).")
-    HMS_list <- NULL
-  }
-  
-  return(list(
-    from_date = from_date, 
-    to_date = to_date, 
-    criteria_pollutants = selected_criteria_pollutants, 
-    meteorological_data = selected_meteorological_data, 
-    HMS_list = HMS_list
-  ))
-}
-
-
-# Get user input via dialog boxes
-# The user can choose more than one parameter
-# User can request data for a full year, a specific month, or multiple months
-user_input <- get_user_input()
-
-# Modify the file names based on the selection
-# Inform the user about the current date range
-cat("Using date range:", format(user_input$from_date, "%Y-%m-%d"), "to", format(user_input$to_date, "%Y-%m-%d"), "\n")
 
 selected_params <- c(user_input$criteria_pollutants, user_input$meteorological_data)
-    
+
 # Initialize dat_out outside the loop to store all results
 dat_out <- list(data = NULL, meta = NULL)  # Empty tibbles to avoid NULL issues
 
@@ -329,7 +233,7 @@ for (type in selected_params) {
     dat_request <- deq_dat(site = sub_meta$shortName, 
                            poll_name = type, 
                            from_date = user_input$from_date, 
-                           to_date = user_input$to_date,
+                           to_date   = user_input$to_date, 
                            monitoring_list = sub_meta)
     
     # Compile data

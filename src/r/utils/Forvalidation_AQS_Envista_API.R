@@ -4,8 +4,12 @@ library(jsonlite)
 
 
 #***********************************************************************************************************************
+
+"email"<- "Fellows.Aaron@deq.state.or.us"
+"pass"<- "khakihawk79"
+
 # AQS API query for validating of hourly and daily DB
-aqs_credentials(emial, pass)
+aqs_credentials(email, pass)
 
 
 # get the county code
@@ -24,6 +28,32 @@ df <- aqs_sampledata_by_site('88101', as.Date(sData, format = '%Y%m%d'), as.Date
 df <- aqs_dailysummary_by_site('88502', as.Date(sData, format = '%Y%m%d'), as.Date(eDate, format = '%Y%m%d'), '41', '043', '0009')
 
 
+i_aqi_call <- paste0("https://aqs.epa.gov/data/api/",
+                     "sampleData/bySite?",
+                     "email=",   SIGNIN_AQS$email,
+                     "&key=",    SIGNIN_AQS$api_key,
+                     "&param=",  param2foc,
+                     "&bdate=",  i_stDate,
+                     "&edate=",  i_edDate,
+                     "&state=",  state,
+                     "&county=", county,
+                     "&site=",   site)
+
+
+i_aqi_call <- paste0("https://aqs.epa.gov/data/api/",
+                     "sampleData/bySite?",
+                     "email=",   email,
+                     "&key=",    pass,
+                     "&param=",  '88101',
+                     "&bdate=",  format(as.Date(sData, format="%Y%m%d"), "%Y%m%d"),  # Correct format
+                     "&edate=",  format(as.Date(eDate, format="%Y%m%d"), "%Y%m%d"),  # Correct format
+                     "&state=",  '41',
+                     "&county=", '035',
+                     "&site=",   '0004')
+
+resp <- GET(i_aqi_call) #get data
+jsonRespParsed <- content(resp,as="text") #parse data
+D2OUT = as.data.frame(fromJSON(jsonRespParsed)[[2]],stringsAsFactors = FALSE)  
 
 #***********************************************************************************************************************
 # AQS API query for validating of hourly and daily DB

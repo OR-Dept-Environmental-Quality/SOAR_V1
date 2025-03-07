@@ -10,6 +10,18 @@ DoRequest <- function(http2get){
   D2OUT = as.data.frame(fromJSON(jsonRespParsed)[[2]],stringsAsFactors = FALSE)  
   return(D2OUT)}
 
+  # NK comment March 2025 to reply Aida's suggestions on the R packages during the code review 
+  # print(resp) Adding print(resp) to a logger will help capture more information if the API endpoints break unexpectedly. 
+  # However, instead of just print(resp), you may want to use proper logging to capture the response details. Here's a better approach:
+  # import logging
+  # 
+  # logging.basicConfig(level=logging.INFO)  # Configure logging level
+  # 
+  # # Assuming `resp` is the API response object
+  
+  # logging.info(f"API Response: {resp.status_code} - {resp.text}")
+  
+
 # query for monitors in Oregon
 #ask to gather credentials,state code, parameter code, time period
 get_aqs_monitors <- function(state2get, params2get, StDate, EdDate, SIGNIN_AQS){

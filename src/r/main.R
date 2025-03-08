@@ -198,7 +198,8 @@ get_user_input <- function() {
     to_date   = format(as.Date(to_date, tryFormats = c("%Y/%m/%d", "%Y-%m-%d")), "%Y/%m/%d"),     # Ensures correct format for API
     criteria_pollutants = selected_criteria_pollutants, 
     meteorological_data = selected_meteorological_data, 
-    HMS_list = HMS_list
+    HMS_list = HMS_list, 
+    selected_year = selected_year
   ))
   
 }
@@ -322,7 +323,7 @@ hourly_pm25 <- hourly_pm25 %>%
 # Save the raw database as-is, without metadata expansion
 # export both as csv and xlsx to not missing 00:00 in csv. 
 # write.csv (hourly_pm25, file = paste0(root_path,"DB/Hourly/first_DB_PM2.5_hourlyRAW.csv"), row.names = FALSE)
-write.xlsx(hourly_pm25, file = paste0(root_path,"DB/Hourly/", selected_year,"first_DB_PM2.5_hourlyRAW.xlsx"), rowNames = FALSE)
+write.xlsx(hourly_pm25, file = paste0(root_path,"DB/Hourly/", user_input$selected_year,"first_DB_PM2.5_hourlyRAW.xlsx"), rowNames = FALSE)
 
 #export raw hourly pm2.5
 #***********************************************************************************************************************
@@ -377,7 +378,7 @@ hourly_pm25 <- hourly_pm25 %>%
   mutate(datetime = format(datetime, "%Y-%m-%d %H:%M:%S"))
 
 # write.csv(hourly_pm25, file = paste0(root_path, "DB/hourly/first_DB_PM2.5_hourly.csv"), row.names = FALSE)
-write.xlsx(hourly_pm25,paste0(root_path, "DB/Hourly/", selected_year, "first_DB_PM2.5_hourly.xlsx"), rownames=FALSE)
+write.xlsx(hourly_pm25,paste0(root_path, "DB/Hourly/", user_input$selected_year, "first_DB_PM2.5_hourly.xlsx"), rownames=FALSE)
 #export hourly pm25 with expanded metadata
 #end of generating hourly DB for PM2.5
 #***********************************************************************************************************************
@@ -386,7 +387,7 @@ write.xlsx(hourly_pm25,paste0(root_path, "DB/Hourly/", selected_year, "first_DB_
 #***********************************************************************************************************************
 # The user can create the hourly database by following the steps above or import an existing one.
 # Step 1: Read the CSV file of raw hourly pm2.5 
-hourly_pm25 <- read.xlsx(paste0(root_path, "DB/Hourly/", selected_year,"first_DB_PM2.5_hourlyRAW.xlsx"),
+hourly_pm25 <- read.xlsx(paste0(root_path, "DB/Hourly/", user_input$selected_year,"first_DB_PM2.5_hourlyRAW.xlsx"),
                          colNames = TRUE,
                          detectDates = TRUE)
 
@@ -408,7 +409,7 @@ daily_pm25$poc_best <- as.numeric(daily_pm25$poc_best)
 #read raw data
 # Step 1: Read the CSV file of raw daily pm2.5 
 # daily_pm25 <- read.csv(paste0(root_path, "DB/daily_DB/first_DB_PM2.5_dailyRAW.csv"))
-daily_pm25 <- read.xlsx(paste0(root_path, ".DB/Daily/", selected_year,"first_DB_PM2.5_dailyRAW.xlsx"))
+daily_pm25 <- read.xlsx(paste0(root_path, ".DB/Daily/", user_input$selected_year,"first_DB_PM2.5_dailyRAW.xlsx"))
 
 # Step 2: Convert the 'datetime' column to POSIXct
 daily_pm25$date <- as.POSIXct(daily_pm25$date, format = "%Y-%m-%d")
@@ -448,7 +449,7 @@ daily_pm25 <- add_time_intervals_daily(daily_pm25)
 # C:\Users\nkhosra\Oregon\DEQ - Air Data Team - OzoneDB\test_DB_PM2.5_summer_2024\Supplemental_Data\
 
 #the user can read HMS data for the wf season 2024 from the DataRepo located on the Air Data Team sharepoint
-# HMS_list <- read.xlsx(paste0(root_path,"Supplemental_Data/HMS_daily_", selected_year,".xlsx"),
+# HMS_list <- read.xlsx(paste0(root_path,"Supplemental_Data/HMS_daily_", user_input$selected_year,".xlsx"),
 #                       colNames = TRUE,
 #                       detectDates = TRUE)
 
@@ -478,7 +479,7 @@ daily_pm25 <- daily_pm25 %>%
 
 
 # Save the raw database as-is, without metadata expansion
-write.xlsx(daily_pm25, paste0(root_path, "DB/Daily/", selected_year,"first_DB_PM2.5_dailyRAW.xlsx"), rowNames = FALSE)
+write.xlsx(daily_pm25, paste0(root_path, "DB/Daily/", user_input$selected_year,"first_DB_PM2.5_dailyRAW.xlsx"), rowNames = FALSE)
 # End of creating of RAW daily pm2.5 
 #***********************************************************************************************************************
 
@@ -507,6 +508,6 @@ daily_pm25 <- left_join(daily_pm25,
 colnames(daily_pm25) <- tolower(colnames(daily_pm25))
 
 
-write.xlsx(daily_pm25, file = paste0(root_path, "DB/Daily/", selected_year,"first_DB_PM2.5_daily.xlsx"), rowNames = FALSE)
+write.xlsx(daily_pm25, file = paste0(root_path, "DB/Daily/", user_input$selected_year,"first_DB_PM2.5_daily.xlsx"), rowNames = FALSE)
 #***********************************************************************************************************************
 #End of exporting the daily DB

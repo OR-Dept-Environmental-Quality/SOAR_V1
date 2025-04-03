@@ -14,3 +14,5 @@ data/processed_data/
 
 # Ignore R package dependencies (use `renv.lock` instead)
 renv/
+
+credentials.json
